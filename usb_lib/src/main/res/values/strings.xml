@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">usb_lib</string>
+    <string name="prompt_msg1">不支持传输协议</string>
+</resources>
