@@ -70,7 +70,8 @@ public class HostService extends Service{
 
     private void registerDeAttached() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
+        intentFilter.addAction(ACTION_DEVICE_PERMISSION);
+        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         this.context.registerReceiver(this.mUsbReceiver, intentFilter);
     }
 

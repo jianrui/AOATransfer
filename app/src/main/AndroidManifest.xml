@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.llvision.acc.test">
 
-
-
     <!-- sd卡写入权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 文件创建/删除文件的权限 -->
@@ -14,6 +12,7 @@
     <!-- 获取进程权限 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
 
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:allowBackup="true"

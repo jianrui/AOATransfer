@@ -5,13 +5,14 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.llvision.usb.library.AOAConstact;
-import com.llvision.usb.library.R;
 import com.llvision.usb.library.LLVisionSdk;
+import com.llvision.usb.library.R;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ import java.util.Iterator;
 public class HostActivity extends AppCompatActivity {
     public static final String DEVICE_EXTRA_KEY = "device";
 
-
+    private Handler mHandler = new Handler();
     private UsbManager mUsbManager;
 
     public HostActivity() {
@@ -39,7 +40,15 @@ public class HostActivity extends AppCompatActivity {
 
                 while(iterator.hasNext()) {
                     UsbDevice device = (UsbDevice)iterator.next();
-                    initAccessory(device);
+                    if (initAccessory(device)) {
+                        //等待Accessory设备枚举
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                searchForUsbAccessory(mUsbManager.getDeviceList());
+                            }
+                        }, 2000);
+                    }
                 }
 
                 this.finish();

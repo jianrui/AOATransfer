@@ -1,6 +1,8 @@
 package com.llvision.usb.library.host;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
@@ -63,6 +65,11 @@ public class HostCommunicator implements Runnable {
             UsbUtil.doUsbHandler(this.hostHandler, "Input Endpoint not found", 1);
         } else if(this.endpointOut == null) {
             UsbUtil.doUsbHandler(this.hostHandler, "Output Endpoint not found", 1);
+        } else if (!usbManager.hasPermission(device)) {
+            UsbUtil.doUsbHandler(this.hostHandler, "host api not permission", 1);
+            PendingIntent mPermissionIntent = PendingIntent.getBroadcast(
+                    context, 0, new Intent(HostService.ACTION_DEVICE_PERMISSION), 0);
+            usbManager.requestPermission(device, mPermissionIntent);
         } else {
             this.connection = usbManager.openDevice(this.device);
             if(this.connection == null) {
@@ -112,7 +119,7 @@ public class HostCommunicator implements Runnable {
 
     private void receive(byte[] payload, int len) {
         if(LLVisionSdk.getInstance(this.context).getUsbServiceCallback() != null) {
-            LLVisionSdk.getInstance(this.context).getUsbServiceCallback().receive(payload, len);
+            LLVisionSdk.getInstance(context).getUsbServiceCallback().receive(payload, len);
         } else {
             UsbUtil.doUsbHandler(this.hostHandler, "no HostServiceCallback", 1);
         }

@@ -31,9 +31,14 @@ public class MainActivity extends AppCompatActivity implements UsbServiceCallbac
     }
 
     @Override
-    public void receive(byte[] datas, int length) {
-        mShowText.append(new String(datas));
-        mShowText.append("len = "+length);
-        mShowText.append("\n");
+    public void receive(final byte[] datas, final int length) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mShowText.append(new String(datas));
+                mShowText.append("len = "+length);
+                mShowText.append("\n");
+            }
+        });
     }
 }
